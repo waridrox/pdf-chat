@@ -1,22 +1,29 @@
 # FastAPI React Starter Template
 
-A modern, minimal starter template featuring FastAPI backend and React 19 frontend with Tailwind CSS.
+A modern, full-featured starter template featuring FastAPI backend and React 19 frontend with Tailwind CSS.
 
 ## Features
 
 - **Backend (FastAPI)**
   - Fast and modern Python web framework
-  - CORS middleware configured
-  - Modular project structure
+  - SQLite database with SQLAlchemy ORM
+  - Async database operations
+  - Proper connection pooling and cleanup
+  - Environment configuration with pydantic
+  - Structured logging
   - Health check endpoint
-  - Ready for database integration
+  - Graceful shutdown handling
+  - Modular project structure
 
 - **Frontend (React 19)**
   - Latest React features including `use` hook
-  - Native Fetch API integration
+  - Component-based architecture
+  - Custom hooks for data fetching
   - Modern error handling with Error Boundaries
   - Suspense for loading states
+  - Reusable UI components
   - Tailwind CSS for styling
+  - Environment configuration
   - Vite for fast development
 
 ## Project Structure
@@ -25,17 +32,44 @@ A modern, minimal starter template featuring FastAPI backend and React 19 fronte
 fastapi-react-starter/
 ├── backend/
 │   ├── app/
-│   │   └── main.py         # FastAPI application
-│   ├── requirements.txt    # Python dependencies
-│   └── Dockerfile         # Backend container configuration
+│   │   ├── __init__.py
+│   │   ├── main.py              # FastAPI application entry
+│   │   ├── config/              # Configuration management
+│   │   │   ├── __init__.py
+│   │   │   └── config.py        # Environment settings
+│   │   ├── db/                  # Database
+│   │   │   ├── __init__.py
+│   │   │   ├── database.py      # Database connection
+│   │   │   └── models.py        # SQLAlchemy models
+│   │   ├── routes/              # API routes
+│   │   │   ├── __init__.py
+│   │   │   ├── health.py        # Health check endpoint
+│   │   │   └── notes.py         # Notes CRUD endpoints
+│   │   └── utils/               # Utilities
+│   │       ├── __init__.py
+│   │       └── logger.py        # Logging configuration
+│   ├── .env                     # Environment variables
+│   └── requirements.txt         # Python dependencies
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx       # Main React component
-│   │   └── index.jsx     # React entry point
-│   ├── package.json      # Node.js dependencies
-│   └── Dockerfile       # Frontend container configuration
-├── docker-compose.yml   # Docker services configuration
-└── README.md           # Project documentation
+│   │   ├── components/          # Reusable UI components
+│   │   │   └── ui/
+│   │   │       ├── Card.jsx     # Card component
+│   │   │       └── StatusDot.jsx # Status indicator
+│   │   ├── features/            # Feature modules
+│   │   │   └── health/          # Health check feature
+│   │   │       ├── HealthStatus.jsx
+│   │   │       ├── LoadingStatus.jsx
+│   │   │       └── ErrorBoundary.jsx
+│   │   ├── hooks/              # Custom React hooks
+│   │   │   └── useHealthStatus.js
+│   │   ├── layouts/            # Page layouts
+│   │   │   └── MainLayout.jsx
+│   │   ├── utils/              # Utility functions
+│   │   └── App.jsx             # Main React component
+│   ├── .env                    # Frontend environment variables
+│   └── package.json            # Node.js dependencies
+└── README.md                   # Project documentation
 ```
 
 ## Quick Start
@@ -46,7 +80,11 @@ fastapi-react-starter/
    ```bash
    cd backend
    python -m venv venv
-   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+   # On Windows:
+   .\venv\Scripts\activate
+   # On Unix:
+   source venv/bin/activate
+   
    pip install -r requirements.txt
    uvicorn app.main:app --reload
    ```
@@ -58,38 +96,54 @@ fastapi-react-starter/
    npm run dev
    ```
 
-### Docker Setup
+### Environment Variables
 
-Run both services using Docker Compose:
-```bash
-docker-compose up --build
-```
+1. Backend (.env):
+   ```env
+   APP_VERSION=1.0.0
+   APP_NAME="FastAPI React Starter"
+   APP_DESCRIPTION="FastAPI React Starter Template"
+   DATABASE_URL="sqlite+aiosqlite:///./app.db"
+   CORS_ORIGINS=["http://localhost:5173"]
+   ```
 
-Access the applications:
+2. Frontend (.env):
+   ```env
+   VITE_API_URL=http://localhost:8000
+   ```
+
+## Access Points
+
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
 
-## Environment Variables
+## Project Organization
+
+### Backend
+
+- **Config Module**: Handles environment variables and application settings using pydantic
+- **Database Module**: Manages SQLite database with SQLAlchemy, including connection pooling
+- **Routes Module**: Contains API endpoints organized by feature
+- **Utils Module**: Houses utility functions like logging
 
 ### Frontend
-Create `.env` in the frontend directory:
-```env
-VITE_API_URL=http://localhost:8000
-```
+
+- **Components**: Reusable UI components like Card and StatusDot
+- **Features**: Feature-specific components organized by domain
+- **Hooks**: Custom React hooks for data fetching and state management
+- **Layouts**: Page layout components
+- **Utils**: Utility functions and helpers
 
 ## Roadmap
 
 ### Planned Features
 
-1. **Database Integration**
-   - [ ] Initial SQLite setup with SQLAlchemy
-   - [ ] Support for multiple database backends (PostgreSQL, MySQL)
-   - [ ] Database migration system
-   - [ ] Connection pooling
-   - [ ] Database configuration via environment variables
-   - [ ] Basic CRUD operations
-   - [ ] Data models and schemas
+1. **Database Enhancements**
+   - [ ] Database migrations with Alembic
+   - [ ] Support for PostgreSQL
+   - [ ] Enhanced connection pooling options
+   - [ ] More comprehensive CRUD operations
 
 2. **Authentication & Authorization**
    - [ ] JWT authentication
@@ -98,10 +152,13 @@ VITE_API_URL=http://localhost:8000
    - [ ] Session management
    - [ ] Password reset flow
 
+3. **Frontend Enhancements**
+   - [ ] State management solution
+   - [ ] Form handling
+   - [ ] More reusable components
+   - [ ] Testing setup
+   - [ ] Progressive Web App support
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
