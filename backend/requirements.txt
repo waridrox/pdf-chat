@@ -3,3 +3,5 @@ uvicorn[standard]==0.34.0
 black==24.1.1
 sqlalchemy==2.0.38
 aiosqlite==0.21.0
+python-dotenv==1.0.1
+pydantic-settings==2.7.1
