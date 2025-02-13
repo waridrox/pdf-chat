@@ -1,106 +1,107 @@
 # FastAPI React Starter Template
 
-A modern, production-ready template featuring FastAPI backend, React frontend with Vite, SQLite database, and Docker support.
+A modern, minimal starter template featuring FastAPI backend and React 19 frontend with Tailwind CSS.
 
 ## Features
 
-- **FastAPI Backend**
+- **Backend (FastAPI)**
+  - Fast and modern Python web framework
+  - CORS middleware configured
+  - Modular project structure
   - Health check endpoint
-  - SQLite database integration
-  - Environment configuration
-  - CORS support
+  - Ready for database integration
 
-- **React Frontend**
-  - Built with Vite for fast development
+- **Frontend (React 19)**
+  - Latest React features including `use` hook
+  - Native Fetch API integration
+  - Modern error handling with Error Boundaries
+  - Suspense for loading states
   - Tailwind CSS for styling
-  - Environment configuration
-  - API integration example
-
-- **Development Tools**
-  - Docker support
-  - Docker Compose for local development
-  - Hot-reloading for both frontend and backend
-
-## Prerequisites
-
-- Docker and Docker Compose
-- Python 3.11+ (for local development)
-- Node.js 20+ (for local development)
-
-## Quick Start
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/fastapi-react-starter.git
-   cd fastapi-react-starter
-   ```
-
-2. Start the application using Docker Compose:
-   ```bash
-   docker-compose up --build
-   ```
-
-3. Access the applications:
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
-
-## Local Development
-
-### Backend
-
-1. Create a virtual environment:
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Run the FastAPI server:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-### Frontend
-
-1. Install dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-2. Start the development server:
-   ```bash
-   npm run dev
-   ```
+  - Vite for fast development
 
 ## Project Structure
 
 ```
 fastapi-react-starter/
-│── backend/           # FastAPI backend
+├── backend/
 │   ├── app/
-│   │   ├── main.py    # Entry point for FastAPI
-│   │   ├── api/       # API routes
-│   │   ├── db/        # Database setup (SQLite)
-│   │   ├── core/      # Configuration settings
-│   ├── Dockerfile     # Backend containerization
-│   ├── requirements.txt  # Backend dependencies
-│── frontend/          # React frontend
+│   │   └── main.py         # FastAPI application
+│   ├── requirements.txt    # Python dependencies
+│   └── Dockerfile         # Backend container configuration
+├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/     # Landing page
-│   ├── package.json   # Frontend dependencies
-│── docker-compose.yml # Dev environment setup
-│── README.md          # Project documentation
-│── .env.example       # Example environment variables
+│   │   ├── App.jsx       # Main React component
+│   │   └── index.jsx     # React entry point
+│   ├── package.json      # Node.js dependencies
+│   └── Dockerfile       # Frontend container configuration
+├── docker-compose.yml   # Docker services configuration
+└── README.md           # Project documentation
 ```
+
+## Quick Start
+
+### Development
+
+1. Backend Setup:
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+   pip install -r requirements.txt
+   uvicorn app.main:app --reload
+   ```
+
+2. Frontend Setup:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+### Docker Setup
+
+Run both services using Docker Compose:
+```bash
+docker-compose up --build
+```
+
+Access the applications:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+
+## Environment Variables
+
+### Frontend
+Create `.env` in the frontend directory:
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+## Roadmap
+
+### Planned Features
+
+1. **Database Integration**
+   - [ ] Initial SQLite setup with SQLAlchemy
+   - [ ] Support for multiple database backends (PostgreSQL, MySQL)
+   - [ ] Database migration system
+   - [ ] Connection pooling
+   - [ ] Database configuration via environment variables
+   - [ ] Basic CRUD operations
+   - [ ] Data models and schemas
+
+2. **Authentication & Authorization**
+   - [ ] JWT authentication
+   - [ ] OAuth2 support (Google, GitHub)
+   - [ ] Role-based access control
+   - [ ] Session management
+   - [ ] Password reset flow
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the LICENSE file for details.
