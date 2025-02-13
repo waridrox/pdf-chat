@@ -12,8 +12,8 @@ settings = get_settings()
 logger = setup_logger(__name__)
 
 app = FastAPI(
-    title=settings.APP_NAME, 
-    version=settings.APP_VERSION, 
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
     description=settings.APP_DESCRIPTION,
 )
 

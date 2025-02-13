@@ -12,16 +12,12 @@ engine = create_async_engine(
     connect_args={"check_same_thread": False},  # Needed for SQLite
     pool_pre_ping=True,  # Enable connection health checks
     pool_recycle=3600,  # Recycle connections after 1 hour
-    echo=False  # Set to True for SQL query logging
+    echo=False,  # Set to True for SQL query logging
 )
 
 # Create async session factory
 AsyncSessionLocal = sessionmaker(
-    engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-    autocommit=False,
-    autoflush=False
+    engine, class_=AsyncSession, expire_on_commit=False, autocommit=False, autoflush=False
 )
 
 
