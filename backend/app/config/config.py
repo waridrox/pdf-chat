@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
@@ -19,3 +21,24 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()
+
+BASE_DIR = Path(__file__).parent.parent
+
+# Logging configuration
+LOGGING_CONFIG = {
+    "development": {
+        "log_level": "DEBUG",
+        "log_dir": BASE_DIR / "logs" / "dev",
+    },
+    "production": {
+        "log_level": "INFO",
+        "log_dir": BASE_DIR / "logs" / "prod",
+    },
+    "testing": {
+        "log_level": "DEBUG",
+        "log_dir": None,  # Console only
+    },
+}
+
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+CURRENT_LOGGING_CONFIG = LOGGING_CONFIG[ENVIRONMENT]
