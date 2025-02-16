@@ -17,11 +17,13 @@ A modern, full-featured starter template featuring FastAPI backend and React 19 
 
 - **Frontend (React 19)**
   - Latest React features including `use` hook
+  - TypeScript for type safety and better developer experience
+  - React Router 7 for client-side routing
+  - shadcn/ui components for beautiful, accessible UI
   - Component-based architecture
   - Custom hooks for data fetching
   - Modern error handling with Error Boundaries
   - Suspense for loading states
-  - Reusable UI components
   - Tailwind CSS for styling
   - Environment configuration
   - Vite for fast development
@@ -53,20 +55,26 @@ fastapi-react-starter/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/          # Reusable UI components
-│   │   │   └── ui/
-│   │   │       ├── Card.jsx     # Card component
-│   │   │       └── StatusDot.jsx # Status indicator
+│   │   │   └── ui/             # shadcn/ui components
+│   │   │       ├── button.tsx
+│   │   │       ├── card.tsx
+│   │   │       └── status-dot.tsx
 │   │   ├── features/            # Feature modules
 │   │   │   └── health/          # Health check feature
-│   │   │       ├── HealthStatus.jsx
-│   │   │       ├── LoadingStatus.jsx
-│   │   │       └── ErrorBoundary.jsx
+│   │   │       ├── HealthStatus.tsx
+│   │   │       ├── LoadingStatus.tsx
+│   │   │       └── ErrorBoundary.tsx
 │   │   ├── hooks/              # Custom React hooks
-│   │   │   └── useHealthStatus.js
+│   │   │   └── useHealthStatus.ts
 │   │   ├── layouts/            # Page layouts
-│   │   │   └── MainLayout.jsx
-│   │   ├── utils/              # Utility functions
-│   │   └── App.jsx             # Main React component
+│   │   │   └── MainLayout.tsx
+│   │   ├── lib/                # Utility functions and configurations
+│   │   │   └── utils.ts
+│   │   ├── routes/             # Route components and configurations
+│   │   │   └── root.tsx
+│   │   ├── types/              # TypeScript type definitions
+│   │   │   └── index.d.ts
+│   │   └── App.tsx             # Main React component
 │   ├── .env                    # Frontend environment variables
 │   └── package.json            # Node.js dependencies
 └── README.md                   # Project documentation
@@ -153,9 +161,11 @@ fastapi-react-starter/
    - [ ] Password reset flow
 
 3. **Frontend Enhancements**
+   - [x] TypeScript migration
+   - [x] Modern routing solution
+   - [x] UI component library
    - [ ] State management solution
    - [ ] Form handling
-   - [ ] More reusable components
    - [ ] Testing setup
    - [ ] Progressive Web App support
 
