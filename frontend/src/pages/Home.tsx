@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ErrorBoundary } from '../features/health/ErrorBoundary'
 import { HealthStatus } from '../features/health/HealthStatus'
 import { LoadingStatus } from '../features/health/LoadingStatus'
+import { Button } from '../components/ui/button'
 
 type FeatureItem = {
   id: string
@@ -86,22 +87,18 @@ export default function Home() {
       </div>
 
       <div className="flex justify-center space-x-4">
-        <button
+        <Button
           onClick={() => navigate('/about')}
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 
-            dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
-          type="button"
+          variant="default"
         >
           Learn More
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => navigate('/dashboard')}
-          className="px-6 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 
-            dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
-          type="button"
+          variant="secondary"
         >
           View Dashboard
-        </button>
+        </Button>
       </div>
     </div>
   )
