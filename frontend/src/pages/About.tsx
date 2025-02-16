@@ -2,18 +2,14 @@ export default function About() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-          About Us
-        </h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">About Us</h1>
         <p className="text-xl text-gray-700 dark:text-gray-300">
           This is a modern full-stack application built with cutting-edge technologies
         </p>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 mb-8">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">
-          Tech Stack
-        </h2>
+        <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Tech Stack</h2>
         <ul className="space-y-4">
           <TechItem
             title="React 19"
@@ -35,9 +31,7 @@ export default function About() {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">
-          Project Goals
-        </h2>
+        <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Project Goals</h2>
         <ul className="list-disc list-inside space-y-3 text-gray-700 dark:text-gray-300">
           <li>Demonstrate modern full-stack development practices</li>
           <li>Provide a solid foundation for building production applications</li>

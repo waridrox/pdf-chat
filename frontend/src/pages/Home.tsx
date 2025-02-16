@@ -35,11 +35,15 @@ export default function Home() {
       </div>
 
       <div className="grid gap-6">
-        <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 
-          bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all">
+        <div
+          className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 
+          bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all"
+        >
           <div className="flex items-start space-x-4">
-            <div className="flex-shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 
-              text-blue-600 dark:text-blue-400">
+            <div
+              className="flex-shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 
+              text-blue-600 dark:text-blue-400"
+            >
               <StatusIcon />
             </div>
             <div className="flex-1">
@@ -55,17 +59,19 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 
-          bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all">
+        <div
+          className="p-6 rounded-lg border border-gray-200 dark:border-gray-700 
+          bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-all"
+        >
           <div className="flex items-start space-x-4">
-            <div className="flex-shrink-0 p-2 rounded-lg bg-green-50 dark:bg-green-900/30 
-              text-green-600 dark:text-green-400">
+            <div
+              className="flex-shrink-0 p-2 rounded-lg bg-green-50 dark:bg-green-900/30 
+              text-green-600 dark:text-green-400"
+            >
               <FeaturesIcon />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                Features
-              </h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Features</h2>
               <ul className="space-y-3 text-gray-600 dark:text-gray-300">
                 {features.map(({ id, text }) => (
                   <li key={id} className="flex items-center">
@@ -103,7 +109,13 @@ export default function Home() {
 
 function StatusIcon() {
   return (
-    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <svg
+      className="w-6 h-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -116,7 +128,13 @@ function StatusIcon() {
 
 function FeaturesIcon() {
   return (
-    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <svg
+      className="w-6 h-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

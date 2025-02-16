@@ -107,9 +107,7 @@ export function AppProvider({ children }: AppProviderProps) {
 
   return (
     <AppContext.Provider value={state}>
-      <AppDispatchContext.Provider value={dispatch}>
-        {children}
-      </AppDispatchContext.Provider>
+      <AppDispatchContext.Provider value={dispatch}>{children}</AppDispatchContext.Provider>
     </AppContext.Provider>
   )
 }

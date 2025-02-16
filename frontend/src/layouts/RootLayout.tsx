@@ -11,7 +11,8 @@ const navLinks = [
 
 export default function RootLayout() {
   const currentYear = new Date().getFullYear()
-  const linkClasses = "text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+  const linkClasses =
+    'text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
 
   return (
     <AppProvider>
@@ -21,11 +22,7 @@ export default function RootLayout() {
             <div className="flex justify-between h-16 items-center">
               <div className="flex space-x-8">
                 {navLinks.map(({ to, label }) => (
-                  <Link
-                    key={to}
-                    to={to}
-                    className={linkClasses}
-                  >
+                  <Link key={to} to={to} className={linkClasses}>
                     {label}
                   </Link>
                 ))}
