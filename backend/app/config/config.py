@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     return Settings()
 
+
 BASE_DIR = Path(__file__).parent.parent
 
 # Logging configuration
