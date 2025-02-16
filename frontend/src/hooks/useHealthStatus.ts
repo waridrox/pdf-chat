@@ -11,11 +11,10 @@ export function useHealthStatus() {
 async function fetchHealthStatus() {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/health`)
-    if (!response.ok) throw new Error('Health check failed')
+    if (!response.ok) return { status: 'error' }
     const data = await response.json()
     return data
   } catch (error) {
-    console.error('Fetch error:', error)
-    throw error
+    return { status: 'error', message: error.message }
   }
 }
