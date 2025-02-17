@@ -25,7 +25,6 @@ venv/
 # Node
 node_modules/
 coverage/
-build/
 .DS_Store
 .env.local
 .env.development.local
@@ -47,22 +46,10 @@ yarn-error.log*
 
 # Docker
 .docker/
-
-# Distribution / packaging
-.Python
 env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+
+# Alembic cache files
+alembic/__pycache__/
+alembic/versions/__pycache__/
 
 logs/

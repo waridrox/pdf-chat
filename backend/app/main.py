@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 
 from app.utils.logger import setup_logger
 from app.routes.health import router as health_router
-from app.routes.notes import router as notes_router
 from app.db.database import init_db, engine
 from app.config import get_settings
 
@@ -28,7 +27,6 @@ app.add_middleware(
 
 # Include routers
 app.include_router(health_router, prefix="/api")
-app.include_router(notes_router, prefix="/api")
 
 logger.info("Application routes configured")
 
