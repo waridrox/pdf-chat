@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from functools import lru_cache
-from typing import Optional
+from typing import Optional, List
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -13,7 +13,8 @@ class Settings(BaseSettings):
     APP_NAME: str = "FastAPI React Starter"
     APP_DESCRIPTION: str = "FastAPI React Starter Template"
     DATABASE_URL: str = "sqlite+aiosqlite:///./app.db"
-    CORS_ORIGINS: list[str] = ["http://localhost:5173"]
+    CORS_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:3000"]
+    API_PREFIX: str = "/api"
 
     # Database settings
     DB_NAME: Optional[str] = None
@@ -26,6 +27,11 @@ class Settings(BaseSettings):
     DB_POOL_TIMEOUT: int = 30
     DB_ECHO: bool = False
     DB_SSL_MODE: Optional[str] = None
+
+    # JWT Settings
+    SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "secret-key-for-development")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     class Config:
         env_file = ".env"

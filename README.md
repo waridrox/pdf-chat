@@ -1,12 +1,14 @@
 # FastAPI React Starter Template
 
-A modern, full-featured starter template featuring FastAPI backend and React 19 frontend with Tailwind CSS.
+A modern, full-featured starter template featuring FastAPI backend and React 19 frontend with TypeScript, Tailwind CSS, and shadcn/ui components.
 
 ## Features
 
 - **Backend (FastAPI)**
   - Fast and modern Python web framework
-  - SQLite database with SQLAlchemy ORM
+  - PostgreSQL/SQLite database with async SQLAlchemy ORM
+  - JWT-based authentication system
+  - Role-based access control
   - Async database operations
   - Proper connection pooling and cleanup
   - Environment configuration with pydantic
@@ -45,39 +47,47 @@ fastapi-react-starter/
 │   │   │   └── models.py        # SQLAlchemy models
 │   │   ├── routes/              # API routes
 │   │   │   ├── __init__.py
-│   │   │   ├── health.py        # Health check endpoint
-│   │   │   └── notes.py         # Notes CRUD endpoints
-│   │   └── utils/               # Utilities
+│   │   │   ├── auth.py         # Authentication endpoints
+│   │   │   └── health.py       # Health check endpoint
+│   │   ├── schemas/            # Pydantic models
+│   │   │   ├── __init__.py
+│   │   │   └── auth.py        # Authentication schemas
+│   │   ├── services/          # Business logic
+│   │   │   ├── __init__.py
+│   │   │   └── auth.py       # Authentication services
+│   │   └── utils/            # Utilities
 │   │       ├── __init__.py
-│   │       └── logger.py        # Logging configuration
-│   ├── .env                     # Environment variables
-│   └── requirements.txt         # Python dependencies
+│   │       └── logger.py     # Logging configuration
+│   ├── .env                  # Environment variables
+│   └── requirements.txt      # Python dependencies
 ├── frontend/
 │   ├── src/
-│   │   ├── components/          # Reusable UI components
-│   │   │   └── ui/             # shadcn/ui components
+│   │   ├── components/       # Reusable UI components
+│   │   │   └── ui/          # shadcn/ui components
 │   │   │       ├── button.tsx
 │   │   │       ├── card.tsx
 │   │   │       └── status-dot.tsx
-│   │   ├── features/            # Feature modules
-│   │   │   └── health/          # Health check feature
-│   │   │       ├── HealthStatus.tsx
-│   │   │       ├── LoadingStatus.tsx
-│   │   │       └── ErrorBoundary.tsx
-│   │   ├── hooks/              # Custom React hooks
+│   │   ├── features/         # Feature modules
+│   │   │   ├── auth/        # Authentication feature
+│   │   │   │   ├── LoginForm.tsx
+│   │   │   │   └── RegisterForm.tsx
+│   │   │   └── health/      # Health check feature
+│   │   │       └── HealthStatus.tsx
+│   │   ├── hooks/           # Custom React hooks
+│   │   │   ├── useAuth.ts
 │   │   │   └── useHealthStatus.ts
-│   │   ├── layouts/            # Page layouts
+│   │   ├── layouts/         # Page layouts
 │   │   │   └── MainLayout.tsx
-│   │   ├── lib/                # Utility functions and configurations
+│   │   ├── lib/             # Utility functions and configurations
 │   │   │   └── utils.ts
-│   │   ├── routes/             # Route components and configurations
+│   │   ├── routes/          # Route components and configurations
 │   │   │   └── root.tsx
-│   │   ├── types/              # TypeScript type definitions
+│   │   ├── types/           # TypeScript type definitions
 │   │   │   └── index.d.ts
-│   │   └── App.tsx             # Main React component
-│   ├── .env                    # Frontend environment variables
-│   └── package.json            # Node.js dependencies
-└── README.md                   # Project documentation
+│   │   └── App.tsx          # Main React component
+│   ├── .env                 # Frontend environment variables
+│   └── package.json         # Node.js dependencies
+└── README.md               # Project documentation
 ```
 
 ## Quick Start
@@ -85,6 +95,23 @@ fastapi-react-starter/
 ### Development
 
 1. Backend Setup:
+
+   First, create a `.env` file in the backend directory:
+   ```env
+   # Database Configuration (PostgreSQL)
+   DB_NAME=your_db_name
+   DB_USER=your_db_user
+   DB_PASSWORD=your_password
+   DB_HOST=localhost
+   DB_PORT=5432
+
+   # JWT Configuration
+   JWT_SECRET_KEY=your-secret-key-for-production
+   ```
+
+   If you don't set database credentials, it will fall back to SQLite.
+
+   Then set up the Python environment:
    ```bash
    cd backend
    python -m venv venv
@@ -97,6 +124,10 @@ fastapi-react-starter/
    uvicorn app.main:app --reload
    ```
 
+   The backend will be available at http://localhost:8000
+   - API documentation: http://localhost:8000/docs
+   - Alternative docs: http://localhost:8000/redoc
+
 2. Frontend Setup:
    ```bash
    cd frontend
@@ -104,71 +135,58 @@ fastapi-react-starter/
    npm run dev
    ```
 
-### Environment Variables
+   The frontend will be available at http://localhost:5173
 
-1. Backend (.env):
-   ```env
-   APP_VERSION=1.0.0
-   APP_NAME="FastAPI React Starter"
-   APP_DESCRIPTION="FastAPI React Starter Template"
-   DATABASE_URL="sqlite+aiosqlite:///./app.db"
-   CORS_ORIGINS=["http://localhost:5173"]
-   ```
+### Authentication System
 
-2. Frontend (.env):
-   ```env
-   VITE_API_URL=http://localhost:8000
-   ```
+The template includes a complete JWT-based authentication system with the following features:
 
-## Access Points
+- User registration with email and username
+- Email-based login
+- JWT token generation and validation
+- Role-based access control (user, admin, moderator)
+- Password reset functionality
+- Email verification support (ready to implement)
 
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
+### Database Support
 
-## Project Organization
+The template supports both SQLite and PostgreSQL:
 
-### Backend
+1. **SQLite** (Default):
+   - No configuration needed
+   - Great for development and small projects
+   - Database file: `app.db` in the backend directory
 
-- **Config Module**: Handles environment variables and application settings using pydantic
-- **Database Module**: Manages SQLite database with SQLAlchemy, including connection pooling
-- **Routes Module**: Contains API endpoints organized by feature
-- **Utils Module**: Houses utility functions like logging
+2. **PostgreSQL**:
+   - Production-ready, scalable database
+   - Async support with asyncpg
+   - Connection pooling and proper cleanup
+   - Configure through environment variables
 
-### Frontend
+To use PostgreSQL, set the database environment variables in `.env` and ensure PostgreSQL is running.
 
-- **Components**: Reusable UI components like Card and StatusDot
-- **Features**: Feature-specific components organized by domain
-- **Hooks**: Custom React hooks for data fetching and state management
-- **Layouts**: Page layout components
-- **Utils**: Utility functions and helpers
+### Frontend Components
 
-## Roadmap
+The template uses shadcn/ui, a collection of beautifully designed, accessible components:
 
-### Planned Features
+- Fully styled with Tailwind CSS
+- Dark mode support
+- TypeScript integration
+- Customizable themes
+- Accessible by default
+- Easy to extend and modify
 
-1. **Database Enhancements**
-   - [ ] Database migrations with Alembic
-   - [ ] Support for PostgreSQL
-   - [ ] Enhanced connection pooling options
-   - [ ] More comprehensive CRUD operations
-
-2. **Authentication & Authorization**
-   - [ ] JWT authentication
-   - [ ] OAuth2 support (Google, GitHub)
-   - [ ] Role-based access control
-   - [ ] Session management
-   - [ ] Password reset flow
-
-3. **Frontend Enhancements**
-   - [x] TypeScript migration
-   - [x] Modern routing solution
-   - [x] UI component library
-   - [ ] State management solution
-   - [ ] Form handling
-   - [ ] Testing setup
-   - [ ] Progressive Web App support
+To add new shadcn/ui components:
+```bash
+cd frontend
+npx shadcn-ui@latest add button
+# Replace 'button' with any component name
+```
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
