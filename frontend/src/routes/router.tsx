@@ -1,11 +1,14 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import RootLayout from '../layouts/RootLayout'
+import { ProtectedRoute } from '../components/ProtectedRoute'
 
-// Lazy load pages
+// Lazy load components
 const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
+const LoginForm = lazy(() => import('../features/auth/LoginForm'))
+const RegisterForm = lazy(() => import('../features/auth/RegisterForm'))
 
 // Error boundary component
 function ErrorBoundary() {
@@ -26,36 +29,60 @@ function PageLoader() {
   )
 }
 
+const routes = {
+  public: [
+    {
+      index: true,
+      element: <Home />,
+    },
+    {
+      path: 'about',
+      element: <About />,
+    },
+    {
+      path: 'login',
+      element: <LoginForm />,
+    },
+    {
+      path: 'register',
+      element: <RegisterForm />,
+    },
+  ],
+  protected: [
+    {
+      path: 'dashboard',
+      element: <Dashboard />,
+    },
+  ],
+}
+
+const withSuspense = (element: React.ReactNode) => (
+  <Suspense fallback={<PageLoader />}>{element}</Suspense>
+)
+
+const withProtection = (element: React.ReactNode) => (
+  <ProtectedRoute>{withSuspense(element)}</ProtectedRoute>
+)
+
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
     errorElement: <ErrorBoundary />,
     children: [
-      {
-        index: true,
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Home />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'about',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <About />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'dashboard',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Dashboard />
-          </Suspense>
-        ),
-      },
+      // Public routes
+      ...routes.public.map((route) => ({
+        ...route,
+        element: withSuspense(route.element),
+      })),
+
+      // Protected routes
+      ...routes.protected.map((route) => ({
+        ...route,
+        element: withProtection(route.element),
+      })),
+
+      // Catch-all route
       {
         path: '*',
         loader: () => redirect('/'),

@@ -1,8 +1,6 @@
 import { createContext, useContext, useReducer, ReactNode, Dispatch } from 'react'
 import { AppState, Theme, NotificationType } from '../types'
-
-const AppContext = createContext<AppState | null>(null)
-const AppDispatchContext = createContext<Dispatch<Action> | null>(null)
+import { AuthProvider } from './AuthContext'
 
 // Action types
 export const ACTIONS = {
@@ -107,7 +105,9 @@ export function AppProvider({ children }: AppProviderProps) {
 
   return (
     <AppContext.Provider value={state}>
-      <AppDispatchContext.Provider value={dispatch}>{children}</AppDispatchContext.Provider>
+      <AppDispatchContext.Provider value={dispatch}>
+        <AuthProvider>{children}</AuthProvider>
+      </AppDispatchContext.Provider>
     </AppContext.Provider>
   )
 }
@@ -171,3 +171,6 @@ export function setUserPreferences(
     payload: preferences,
   })
 }
+
+const AppContext = createContext<AppState | null>(null)
+const AppDispatchContext = createContext<Dispatch<Action> | null>(null)
