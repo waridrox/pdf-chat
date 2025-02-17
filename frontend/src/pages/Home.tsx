@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { CircleCheck, Sparkles } from 'lucide-react'
 import { ErrorBoundary } from '../features/health/ErrorBoundary'
 import { HealthStatus } from '../features/health/HealthStatus'
 import { LoadingStatus } from '../features/health/LoadingStatus'
@@ -45,7 +46,7 @@ export default function Home() {
               className="flex-shrink-0 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 
               text-blue-600 dark:text-blue-400"
             >
-              <StatusIcon />
+              <CircleCheck />
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
@@ -69,7 +70,7 @@ export default function Home() {
               className="flex-shrink-0 p-2 rounded-lg bg-green-50 dark:bg-green-900/30 
               text-green-600 dark:text-green-400"
             >
-              <FeaturesIcon />
+              <Sparkles />
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Features</h2>
@@ -95,43 +96,5 @@ export default function Home() {
         </Button>
       </div>
     </div>
-  )
-}
-
-function StatusIcon() {
-  return (
-    <svg
-      className="w-6 h-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  )
-}
-
-function FeaturesIcon() {
-  return (
-    <svg
-      className="w-6 h-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-      />
-    </svg>
   )
 }
