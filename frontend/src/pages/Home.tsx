@@ -87,16 +87,10 @@ export default function Home() {
       </div>
 
       <div className="flex justify-center space-x-4">
-        <Button
-          onClick={() => navigate('/about')}
-          variant="default"
-        >
+        <Button onClick={() => navigate('/about')} variant="default">
           Learn More
         </Button>
-        <Button
-          onClick={() => navigate('/dashboard')}
-          variant="secondary"
-        >
+        <Button onClick={() => navigate('/dashboard')} variant="secondary">
           View Dashboard
         </Button>
       </div>

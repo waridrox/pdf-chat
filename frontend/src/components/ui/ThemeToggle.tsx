@@ -18,11 +18,7 @@ export function ThemeToggle() {
       variant="ghost"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
     >
-      {theme === 'light' ? (
-        <SunIcon />
-      ) : (
-        <MoonIcon />
-      )}
+      {theme === 'light' ? <SunIcon /> : <MoonIcon />}
     </Button>
   )
 }
