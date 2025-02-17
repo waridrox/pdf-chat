@@ -7,8 +7,8 @@ import { ProtectedRoute } from '../components/ProtectedRoute'
 const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
 const Dashboard = lazy(() => import('../pages/Dashboard'))
-const LoginForm = lazy(() => import('../features/auth/LoginForm'))
-const RegisterForm = lazy(() => import('../features/auth/RegisterForm'))
+const Login = lazy(() => import('../pages/Login'))
+const Register = lazy(() => import('../pages/Register'))
 
 // Error boundary component
 function ErrorBoundary() {
@@ -41,11 +41,11 @@ const routes = {
     },
     {
       path: 'login',
-      element: <LoginForm />,
+      element: <Login />,
     },
     {
       path: 'register',
-      element: <RegisterForm />,
+      element: <Register />,
     },
   ],
   protected: [

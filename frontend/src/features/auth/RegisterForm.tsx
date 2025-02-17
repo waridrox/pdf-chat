@@ -58,7 +58,7 @@ function RegisterFormContent() {
   })
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>Create a new account</CardDescription>
@@ -73,6 +73,7 @@ function RegisterFormContent() {
               placeholder="name@example.com"
               required
               disabled={state.isLoading}
+              className="w-full"
             />
           </div>
           <div className="space-y-2">
@@ -83,6 +84,7 @@ function RegisterFormContent() {
               placeholder="Choose a username"
               required
               disabled={state.isLoading}
+              className="w-full"
             />
           </div>
           <div className="space-y-2">
@@ -93,6 +95,7 @@ function RegisterFormContent() {
               placeholder="Enter your password"
               required
               disabled={state.isLoading}
+              className="w-full"
             />
           </div>
           <div className="space-y-2">
@@ -103,6 +106,7 @@ function RegisterFormContent() {
               placeholder="Confirm your password"
               required
               disabled={state.isLoading}
+              className="w-full"
             />
           </div>
           {state.error && <div className="text-sm text-red-500">{state.error}</div>}
@@ -117,7 +121,7 @@ function RegisterFormContent() {
             Login
           </Button>
           <Button type="submit" disabled={state.isLoading}>
-            {state.isLoading ? 'Registering...' : 'Register'}
+            {state.isLoading ? 'Creating account...' : 'Register'}
           </Button>
         </CardFooter>
       </form>

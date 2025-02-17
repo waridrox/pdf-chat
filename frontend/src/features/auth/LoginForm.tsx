@@ -50,7 +50,7 @@ function LoginFormContent() {
   })
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Enter your email below to login to your account</CardDescription>
@@ -65,6 +65,7 @@ function LoginFormContent() {
               placeholder="name@example.com"
               required
               disabled={state.isLoading}
+              className="w-full"
             />
           </div>
           <div className="space-y-2">
@@ -75,6 +76,7 @@ function LoginFormContent() {
               placeholder="Enter your password"
               required
               disabled={state.isLoading}
+              className="w-full"
             />
           </div>
           {state.error && <div className="text-sm text-red-500">{state.error}</div>}
