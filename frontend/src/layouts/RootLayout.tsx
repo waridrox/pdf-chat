@@ -67,9 +67,9 @@ export default function RootLayout() {
 
   return (
     <AppProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
         <Navigation />
-        <main className="container mx-auto px-6 py-8">
+        <main className="flex-1 container mx-auto px-6 py-8">
           <Outlet />
         </main>
         <footer className="bg-white dark:bg-gray-800 shadow-sm transition-colors mt-auto">
