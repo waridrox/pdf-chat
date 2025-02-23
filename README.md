@@ -92,41 +92,70 @@ fastapi-react-starter/
 
 ## Quick Start
 
-### Development
+### Using Docker (Recommended)
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/raythurman2386/fastapi-react-starter.git
+   cd fastapi-react-starter
+   ```
+
+2. Create environment files:
+
+   Create `.env` file in the root directory:
+   ```env
+   # Database Configuration
+   DB_USER=postgres
+   DB_PASSWORD=postgres
+   DB_NAME=fastapi_db
+   ```
+
+3. Start the application with Docker:
+   ```bash
+   docker compose up --build
+   ```
+
+   This will:
+   - Start PostgreSQL database
+   - Reset the database (drop and recreate with fresh migrations)
+   - Start the FastAPI backend at http://localhost:8000
+   - Start the React frontend at http://localhost:5173
+
+   The Swagger docs will be available at http://localhost:8000/docs
+
+### Manual Setup (Alternative)
 
 1. Backend Setup:
 
-   First, create a `.env` file in the backend directory:
+   a. Install PostgreSQL and create a database:
+   ```bash
+   # macOS with Homebrew
+   brew install postgresql
+   brew services start postgresql
+   
+   # Create database
+   createdb fastapi_db
+   ```
+
+   b. Create a `.env` file in the backend directory:
    ```env
-   # Database Configuration (PostgreSQL)
-   DB_NAME=your_db_name
-   DB_USER=your_db_user
-   DB_PASSWORD=your_password
+   # Database Configuration
+   DB_NAME=fastapi_db
+   DB_USER=postgres  # your database user
+   DB_PASSWORD=postgres  # your database password
    DB_HOST=localhost
    DB_PORT=5432
-
-   # JWT Configuration
-   JWT_SECRET_KEY=your-secret-key-for-production
+   CORS_ORIGINS=["http://localhost:5173"]
+   ENVIRONMENT=development
    ```
 
-   If you don't set database credentials, it will fall back to SQLite.
-
-   Then set up the Python environment:
+   c. Install Python dependencies and run migrations:
    ```bash
    cd backend
-   python -m venv venv
-   # On Windows:
-   .\venv\Scripts\activate
-   # On Unix:
-   source venv/bin/activate
-   
    pip install -r requirements.txt
+   python manage.py reset_db  # This will reset the database and apply migrations
    uvicorn app.main:app --reload
    ```
-
-   The backend will be available at http://localhost:8000
-   - API documentation: http://localhost:8000/docs
-   - Alternative docs: http://localhost:8000/redoc
 
 2. Frontend Setup:
    ```bash
@@ -135,53 +164,45 @@ fastapi-react-starter/
    npm run dev
    ```
 
-   The frontend will be available at http://localhost:5173
+### Database Management
 
-### Authentication System
+The project includes several database management commands:
 
-The template includes a complete JWT-based authentication system with the following features:
-
-- User registration with email and username
-- Email-based login
-- JWT token generation and validation
-- Role-based access control (user, admin, moderator)
-- Password reset functionality
-- Email verification support (ready to implement)
-
-### Database Support
-
-The template supports both SQLite and PostgreSQL:
-
-1. **SQLite** (Default):
-   - No configuration needed
-   - Great for development and small projects
-   - Database file: `app.db` in the backend directory
-
-2. **PostgreSQL**:
-   - Production-ready, scalable database
-   - Async support with asyncpg
-   - Connection pooling and proper cleanup
-   - Configure through environment variables
-
-To use PostgreSQL, set the database environment variables in `.env` and ensure PostgreSQL is running.
-
-### Frontend Components
-
-The template uses shadcn/ui, a collection of beautifully designed, accessible components:
-
-- Fully styled with Tailwind CSS
-- Dark mode support
-- TypeScript integration
-- Customizable themes
-- Accessible by default
-- Easy to extend and modify
-
-To add new shadcn/ui components:
 ```bash
-cd frontend
-npx shadcn-ui@latest add button
-# Replace 'button' with any component name
+# Reset the database (drop, recreate, and apply migrations)
+python manage.py reset_db
+
+# Generate new migrations
+python manage.py makemigrations "description of changes"
+
+# Apply pending migrations
+python manage.py migrate
+
+# Check migration status
+python manage.py db_status
+
+# Rollback last migration
+python manage.py downgrade
 ```
+
+If you encounter database errors:
+1. Stop all running services
+2. Reset the database using `python manage.py reset_db` or through Docker with `docker compose up --build`
+3. The database will be recreated with fresh tables
+
+### Troubleshooting
+
+1. Backend Status shows "error":
+   - Ensure PostgreSQL is running
+   - Check database credentials in `.env`
+   - Try resetting the database using `python manage.py reset_db`
+   - Check backend logs for specific error messages
+
+2. User Registration fails:
+   - Ensure the database is properly initialized
+   - Check if backend is running and accessible
+   - Verify CORS settings in backend `.env`
+   - Check browser console for specific error messages
 
 ## Contributing
 
