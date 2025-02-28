@@ -51,5 +51,54 @@ env/
 # Alembic cache files
 alembic/__pycache__/
 alembic/versions/__pycache__/
+__pycache__/
 
+# Logs
 logs/
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# Environments beyond venv
+.env.*
+!.env.example
+!.env.docker
+
+# OS specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Frontend build artifacts
+frontend/dist/
+frontend/build/
+frontend/.cache/
+
+# TypeScript
+*.tsbuildinfo
+.eslintcache
+.vercel
+.turbo
+
+# Package managers
+yarn.lock
+package-lock.json
+
+# Temporary files
+*.tmp
+*~
+tmp/
+temp/
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
+*.cert

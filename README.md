@@ -5,6 +5,7 @@ A modern, full-featured starter template featuring FastAPI backend and React 19 
 ## Features
 
 - **Backend (FastAPI)**
+
   - Fast and modern Python web framework
   - PostgreSQL/SQLite database with async SQLAlchemy ORM
   - JWT-based authentication system
@@ -95,6 +96,7 @@ fastapi-react-starter/
 ### Using Docker (Recommended)
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/raythurman2386/fastapi-react-starter.git
    cd fastapi-react-starter
@@ -103,6 +105,7 @@ fastapi-react-starter/
 2. Create environment files:
 
    Create `.env` file in the root directory:
+
    ```env
    # Database Configuration
    DB_USER=postgres
@@ -111,11 +114,13 @@ fastapi-react-starter/
    ```
 
 3. Start the application with Docker:
+
    ```bash
    docker compose up --build
    ```
 
    This will:
+
    - Start PostgreSQL database
    - Reset the database (drop and recreate with fresh migrations)
    - Start the FastAPI backend at http://localhost:8000
@@ -123,21 +128,58 @@ fastapi-react-starter/
 
    The Swagger docs will be available at http://localhost:8000/docs
 
+### Automated Setup Scripts
+
+For your convenience, this project includes automated setup scripts for both Windows and Linux/Mac:
+
+#### Windows Setup
+
+1. Open PowerShell as Administrator
+2. Navigate to the project directory
+3. Run the setup script:
+   ```powershell
+   .\setup.ps1
+   ```
+
+This script will:
+
+- Check for required dependencies (Git, Python, Node.js)
+- Install pnpm if not already installed
+- Set up Git hooks for code formatting using pre-commit
+- Create and configure Python virtual environment for the backend
+- Install backend dependencies
+- Install frontend dependencies with pnpm
+- Set up environment variables
+
+#### Linux/Mac Setup
+
+1. Open a terminal
+2. Navigate to the project directory
+3. Make the script executable and run it:
+   ```bash
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+
+This script performs the same setup steps as the Windows version but is adapted for Unix-based systems.
+
 ### Manual Setup (Alternative)
 
 1. Backend Setup:
 
    a. Install PostgreSQL and create a database:
+
    ```bash
    # macOS with Homebrew
    brew install postgresql
    brew services start postgresql
-   
+
    # Create database
    createdb fastapi_db
    ```
 
    b. Create a `.env` file in the backend directory:
+
    ```env
    # Database Configuration
    DB_NAME=fastapi_db
@@ -150,6 +192,7 @@ fastapi-react-starter/
    ```
 
    c. Install Python dependencies and run migrations:
+
    ```bash
    cd backend
    pip install -r requirements.txt
@@ -186,6 +229,7 @@ python manage.py downgrade
 ```
 
 If you encounter database errors:
+
 1. Stop all running services
 2. Reset the database using `python manage.py reset_db` or through Docker with `docker compose up --build`
 3. The database will be recreated with fresh tables
@@ -193,6 +237,7 @@ If you encounter database errors:
 ### Troubleshooting
 
 1. Backend Status shows "error":
+
    - Ensure PostgreSQL is running
    - Check database credentials in `.env`
    - Try resetting the database using `python manage.py reset_db`
