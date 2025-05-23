@@ -4,7 +4,7 @@ import { CircleCheck, Sparkles } from 'lucide-react'
 import { ErrorBoundary } from '../features/health/ErrorBoundary'
 import { HealthStatus } from '../features/health/HealthStatus'
 import { LoadingStatus } from '../features/health/LoadingStatus'
-import { Button } from '../components/ui/button'
+import { Button } from '../components/ui/Button'
 
 type FeatureItem = {
   id: string

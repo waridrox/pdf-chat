@@ -1,5 +1,5 @@
 import { MoonIcon, SunIcon } from 'lucide-react'
-import { Button } from '../ui/Button'
+import { Button } from './Button'
 import { useAppState, useAppDispatch, setTheme } from '../../context/AppContext'
 import { Theme } from '../../types'
 
