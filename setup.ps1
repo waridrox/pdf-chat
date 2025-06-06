@@ -1,207 +1,90 @@
-# FastAPI React Starter Setup Script for Windows
-# This script sets up the development environment for the FastAPI React Starter project
+# FastAPI React Starter Setup Script for Windows (Docker Focus)
+# This script sets up Docker Desktop and prepares the environment for a Docker-based FastAPI React project
 
 # Stop on any error
 $ErrorActionPreference = "Stop"
 
-Write-Host "=== FastAPI React Starter Setup Script for Windows ===" -ForegroundColor Green
+Write-Host "=== FastAPI React Starter Setup Script for Windows (Docker Focus) ===" -ForegroundColor Green
 
-# Check if git is installed
-try {
-    $gitVersion = git --version
-    Write-Host "Git found: $gitVersion" -ForegroundColor Green
-} catch {
-    Write-Host "Git is not installed. Please install Git and try again." -ForegroundColor Red
-    exit 1
-}
-
-# Check if Python is installed
-try {
-    $pythonVersion = python --version
-    Write-Host "Python found: $pythonVersion" -ForegroundColor Green
-} catch {
-    Write-Host "Python is not installed. Please install Python 3.8+ and try again." -ForegroundColor Red
-    exit 1
-}
-
-# Check if Node.js is installed
-try {
-    $nodeVersion = node --version
-    Write-Host "Node.js found: $nodeVersion" -ForegroundColor Green
-} catch {
-    Write-Host "Node.js is not installed. Please install Node.js 16+ and try again." -ForegroundColor Red
-    exit 1
-}
-
-# Check if pnpm is installed
-try {
-    $pnpmVersion = pnpm --version
-    Write-Host "pnpm found: $pnpmVersion" -ForegroundColor Green
-} catch {
-    Write-Host "pnpm is not installed. Installing pnpm..." -ForegroundColor Yellow
-    npm install -g pnpm
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Failed to install pnpm. Please install it manually and try again." -ForegroundColor Red
-        exit 1
-    }
-    Write-Host "pnpm installed successfully" -ForegroundColor Green
-}
-
-# Setup Git hooks
-Write-Host "`nSetting up Git hooks for code formatting..." -ForegroundColor Cyan
-
-# Install pre-commit
-pip install pre-commit
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to install pre-commit. Please check your Python installation." -ForegroundColor Red
-    exit 1
-}
-
-# Find the pre-commit executable
-$preCommitPath = $null
-
-# Try to find pre-commit in the PATH
-$preCommitCommand = Get-Command pre-commit -ErrorAction SilentlyContinue
-if ($preCommitCommand) {
-    $preCommitPath = $preCommitCommand.Source
-    Write-Host "Found pre-commit in PATH: $preCommitPath" -ForegroundColor Green
-} else {
-    # Common locations for Python scripts in user directories
-    $potentialLocations = @(
-        "$env:APPDATA\Python\Scripts\pre-commit.exe",
-        "$env:APPDATA\Python\Python*\Scripts\pre-commit.exe",
-        "$env:LOCALAPPDATA\Programs\Python\Python*\Scripts\pre-commit.exe",
-        "$env:USERPROFILE\.local\bin\pre-commit"
+# Function to check if a command exists
+function Test-CommandExists {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Command
     )
+    return (Get-Command -Name $Command -ErrorAction SilentlyContinue) -ne $null
+}
 
-    foreach ($location in $potentialLocations) {
-        $resolvedPaths = Resolve-Path -Path $location -ErrorAction SilentlyContinue
-        if ($resolvedPaths) {
-            foreach ($path in $resolvedPaths) {
-                if (Test-Path $path) {
-                    $preCommitPath = $path
-                    Write-Host "Found pre-commit at: $preCommitPath" -ForegroundColor Green
-                    break
-                }
-            }
-        }
-        if ($preCommitPath) { break }
+# 1. Check for Docker Desktop
+Write-Host "`n[1/3] Checking for Docker Desktop..." -ForegroundColor Cyan
+if (Test-CommandExists docker) {
+    $dockerVersion = docker --version
+    Write-Host "Docker found: $dockerVersion" -ForegroundColor Green
+} else {
+    Write-Host "Docker Desktop is not installed." -ForegroundColor Red
+    Write-Host "Attempting to install Docker Desktop using winget..." -ForegroundColor Yellow
+    Write-Host "This requires winget and administrative privileges." -ForegroundColor Yellow
+
+    if (-not (Test-CommandExists winget)) {
+        Write-Host "Error: winget is not installed. Cannot install Docker Desktop." -ForegroundColor Red
+        Write-Host "Please install winget or Docker Desktop manually: https://docs.docker.com/desktop/install/windows-install/" -ForegroundColor Yellow
+        exit 1
     }
 
-    # If still not found, try to get it from pip show
-    if (-not $preCommitPath) {
-        $pipShowOutput = pip show pre-commit
-        $installLocation = $pipShowOutput | Where-Object { $_ -like "Location:*" }
-        if ($installLocation) {
-            $location = ($installLocation -split "Location: ")[1].Trim()
-            $potentialPath = Join-Path -Path (Join-Path -Path $location -ChildPath "..") -ChildPath "Scripts\pre-commit.exe"
-            if (Test-Path $potentialPath) {
-                $preCommitPath = $potentialPath
-                Write-Host "Found pre-commit at: $preCommitPath" -ForegroundColor Green
-            }
+    try {
+        winget install -e --id Docker.DockerDesktop --accept-source-agreements --accept-package-agreements
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Error: Failed to install Docker Desktop via winget." -ForegroundColor Red
+            Write-Host "Please install Docker Desktop manually: https://docs.docker.com/desktop/install/windows-install/" -ForegroundColor Yellow
+            exit 1
         }
-    }
-
-    # If still not found
-    if (-not $preCommitPath) {
-        Write-Host "pre-commit.exe was installed but cannot be found." -ForegroundColor Red
-        Write-Host "Please try running the following command in a new PowerShell window:" -ForegroundColor Yellow
-        Write-Host "pip install pre-commit && pre-commit install" -ForegroundColor Yellow
+        Write-Host "Docker Desktop installed successfully." -ForegroundColor Green
+        Write-Host "IMPORTANT: Please start Docker Desktop manually after installation and ensure it is running." -ForegroundColor Yellow
+        Write-Host "You may need to restart your system or open Docker Desktop to complete setup." -ForegroundColor Yellow
+        Write-Host "After starting Docker Desktop, re-run this script to continue." -ForegroundColor Yellow
+        exit 0
+    } catch {
+        Write-Host "Error: Docker Desktop installation failed." -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor Red
+        Write-Host "Please install Docker Desktop manually: https://docs.docker.com/desktop/install/windows-install/" -ForegroundColor Yellow
         exit 1
     }
 }
 
-# Create .pre-commit-config.yaml if it doesn't exist
-if (-not (Test-Path ".pre-commit-config.yaml")) {
-    Write-Host "Creating .pre-commit-config.yaml..." -ForegroundColor Yellow
-    @"
-repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-    -   id: trailing-whitespace
-        stages: [pre-commit]
-    -   id: end-of-file-fixer
-        stages: [pre-commit]
-    -   id: check-yaml
-        stages: [pre-commit]
-    -   id: check-added-large-files
-        stages: [pre-commit]
-
--   repo: https://github.com/psf/black
-    rev: 24.1.1
-    hooks:
-    -   id: black
-        stages: [pre-commit]
-
--   repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.1.0
-    hooks:
-    -   id: prettier
-        types_or: [javascript, jsx, ts, tsx, json, css, scss, markdown]
-        stages: [pre-commit]
-        files: ^frontend/src/.*\.(js|jsx|ts|tsx|json|css|scss|md)$
-"@ | Out-File -FilePath ".pre-commit-config.yaml" -Encoding utf8
-}
-
-# Install the git hooks
-& $preCommitPath install
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to install pre-commit hooks. Please check your installation." -ForegroundColor Red
+# 2. Check for Docker Compose
+Write-Host "`n[2/3] Checking for Docker Compose..." -ForegroundColor Cyan
+try {
+    $composeVersion = docker compose version
+    Write-Host "Docker Compose found: $composeVersion" -ForegroundColor Green
+} catch {
+    Write-Host "Error: Docker Compose not found or 'docker compose' command failed." -ForegroundColor Red
+    Write-Host "Docker Compose should be included with Docker Desktop." -ForegroundColor Yellow
+    Write-Host "Please ensure Docker Desktop is running and up to date." -ForegroundColor Yellow
+    Write-Host "You can update Docker Desktop via winget: winget upgrade Docker.DockerDesktop" -ForegroundColor Yellow
+    Write-Host "Or download the latest version: https://docs.docker.com/desktop/install/windows-install/" -ForegroundColor Yellow
     exit 1
 }
 
-# Setup Backend
-Write-Host "`nSetting up backend environment..." -ForegroundColor Cyan
-
-# Create virtual environment if it doesn't exist
-if (-not (Test-Path "backend\venv")) {
-    Write-Host "Creating Python virtual environment..." -ForegroundColor Yellow
-    python -m venv backend\venv
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Failed to create virtual environment. Please check your Python installation." -ForegroundColor Red
-        exit 1
-    }
-}
-
-# Activate virtual environment and install dependencies
-Write-Host "Installing backend dependencies..." -ForegroundColor Yellow
-& backend\venv\Scripts\Activate.ps1
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to activate virtual environment. Please check your Python installation." -ForegroundColor Red
-    exit 1
-}
-
-pip install -r backend\requirements.txt
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to install backend dependencies. Please check your Python installation." -ForegroundColor Red
-    exit 1
-}
-
-# Deactivate virtual environment
-deactivate
-
-# Setup Frontend
-Write-Host "`nSetting up frontend environment..." -ForegroundColor Cyan
-Set-Location frontend
-Write-Host "Installing frontend dependencies with pnpm..." -ForegroundColor Yellow
-pnpm install
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Failed to install frontend dependencies. Please check your pnpm installation." -ForegroundColor Red
-    Set-Location ..
-    exit 1
-}
-Set-Location ..
-
-# Setup environment variables
-Write-Host "`nSetting up environment variables..." -ForegroundColor Cyan
+# 3. Setup .env file
+Write-Host "`n[3/3] Setting up .env file..." -ForegroundColor Cyan
 if (-not (Test-Path ".env")) {
-    Write-Host "Creating .env file from .env.example..." -ForegroundColor Yellow
-    Copy-Item .env.example .env
+    if (Test-Path ".env.example") {
+        Write-Host "Creating .env file from .env.example..." -ForegroundColor Yellow
+        Copy-Item -Path ".env.example" -Destination ".env"
+        Write-Host ".env file created successfully." -ForegroundColor Green
+        Write-Host "Important: Review '.env' and customize any necessary variables (e.g., API keys, ports)." -ForegroundColor Yellow
+    } else {
+        Write-Host "Warning: '.env.example' not found. Skipping .env file creation." -ForegroundColor Yellow
+        Write-Host "If your application requires an .env file, please create it manually." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host ".env file already exists. No changes made." -ForegroundColor Green
 }
 
-Write-Host "`nSetup completed successfully!" -ForegroundColor Green
-Write-Host "`nTo start the backend, run:" -ForegroundColor Cyan
-Write-Host "cd backend && ..\venv\Scripts\Activate.ps1 && uvicorn app.main:app --reload" -ForegroundColor Yellow
-Write-Host "`nTo start the frontend, run:" -ForegroundColor Cyan
-Write-Host "cd frontend && pnpm dev" -ForegroundColor Yellow
+Write-Host "`n=== Setup Completed Successfully! ===" -ForegroundColor Green
+Write-Host "`nYou should now be able to manage the application using Docker Compose." -ForegroundColor Cyan
+Write-Host "Common commands:" -ForegroundColor Yellow
+Write-Host "  docker compose up --build -d  (to build and start services in detached mode)" -ForegroundColor Green
+Write-Host "  docker compose logs -f        (to view logs)" -ForegroundColor Green
+Write-Host "  docker compose down           (to stop and remove containers)" -ForegroundColor Green
+Write-Host "`nRefer to the project's README.md and docker-compose.yml for more details." -ForegroundColor Cyan

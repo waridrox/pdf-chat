@@ -143,12 +143,8 @@ For your convenience, this project includes automated setup scripts for both Win
 
 This script will:
 
-- Check for required dependencies (Git, Python, Node.js)
-- Install pnpm if not already installed
-- Set up Git hooks for code formatting using pre-commit
-- Create and configure Python virtual environment for the backend
-- Install backend dependencies
-- Install frontend dependencies with pnpm
+- Check for required dependencies (Docker, Docker Compose V2)
+- Install the correct version of docker recommended for the system.
 - Set up environment variables
 
 #### Linux/Mac Setup
