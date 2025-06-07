@@ -16,7 +16,7 @@ function Navigation() {
   const navigate = useNavigate()
   const { isAuthenticated, logout } = useAuth()
   const linkClasses =
-    'text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium'
+    'text-card-foreground hover:text-accent-foreground px-3 py-2 rounded-md text-sm font-medium'
 
   const handleLogout = () => {
     logout()
@@ -24,7 +24,7 @@ function Navigation() {
   }
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm transition-colors">
+    <nav className="bg-card text-card-foreground shadow-sm transition-colors">
       <div className="container mx-auto px-6">
         <div className="flex justify-between h-16 items-center">
           <div className="flex space-x-8">
@@ -46,7 +46,7 @@ function Navigation() {
               <Button
                 variant="ghost"
                 onClick={handleLogout}
-                className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
+                className="text-card-foreground hover:text-accent-foreground"
               >
                 Logout
               </Button>
@@ -67,14 +67,14 @@ export default function RootLayout() {
 
   return (
     <AppProvider>
-      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
+      <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors">
         <Navigation />
         <main className="flex-1 container mx-auto px-6 py-8">
           <Outlet />
         </main>
-        <footer className="bg-white dark:bg-gray-800 shadow-sm transition-colors mt-auto">
+        <footer className="bg-card text-card-foreground shadow-sm transition-colors mt-auto">
           <div className="container mx-auto px-6 py-4">
-            <p className="text-center text-gray-500 dark:text-gray-400">
+            <p className="text-center text-muted-foreground">
               {currentYear} FastAPI React Starter. All rights reserved.
             </p>
           </div>
