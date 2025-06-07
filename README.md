@@ -122,7 +122,7 @@ fastapi-react-starter/
    This will:
 
    - Start PostgreSQL database
-   - Reset the database (drop and recreate with fresh migrations)
+   - Apply migrations to a fresh database (e.g., after Docker volume removal)
    - Start the FastAPI backend at http://localhost:8000
    - Start the React frontend at http://localhost:5173
 
@@ -192,7 +192,7 @@ This script performs the same setup steps as the Windows version but is adapted 
    ```bash
    cd backend
    pip install -r requirements.txt
-   python manage.py reset_db  # This will reset the database and apply migrations
+   python manage.py migrate
    uvicorn app.main:app --reload
    ```
 
@@ -208,27 +208,27 @@ This script performs the same setup steps as the Windows version but is adapted 
 The project includes several database management commands:
 
 ```bash
-# Reset the database (drop, recreate, and apply migrations)
-python manage.py reset_db
-
 # Generate new migrations
 python manage.py makemigrations "description of changes"
 
 # Apply pending migrations
 python manage.py migrate
 
+# Apply all migrations to a (presumably) fresh database (runs 'alembic upgrade head')
+python manage.py reset_db
+
 # Check migration status
-python manage.py db_status
+python manage.py db-status
 
 # Rollback last migration
 python manage.py downgrade
 ```
 
-If you encounter database errors:
+If you encounter database errors and need a full reset:
 
-1. Stop all running services
-2. Reset the database using `python manage.py reset_db` or through Docker with `docker compose up --build`
-3. The database will be recreated with fresh tables
+1. Stop all running services: `docker compose down`
+2. Remove the PostgreSQL Docker volume (e.g., `docker volume rm fastapi-react-starter_postgres_data` - verify volume name with `docker volume ls`)
+3. Restart services: `docker compose up -d --build`
 
 ### Troubleshooting
 
@@ -236,7 +236,7 @@ If you encounter database errors:
 
    - Ensure PostgreSQL is running
    - Check database credentials in `.env`
-   - Try resetting the database using `python manage.py reset_db`
+   - For a full reset, see the 'If you encounter database errors' section above (involves Docker volume removal).
    - Check backend logs for specific error messages
 
 2. User Registration fails:

@@ -1,5 +1,6 @@
 services:
   postgres:
+    container_name: starter-db
     image: postgres:17-alpine
     ports:
       - "5432:5432"
@@ -17,6 +18,7 @@ services:
       start_period: 10s
 
   backend:
+    container_name: starter-backend
     build: ./backend
     ports:
       - "8000:8000"
@@ -42,6 +44,7 @@ services:
     command: bash -c "python manage.py run"
 
   frontend:
+    container_name: starter-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
