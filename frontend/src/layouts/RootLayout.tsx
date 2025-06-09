@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { AppProvider } from '../context/AppContext'
 import { Notification } from '../components/ui/Notification'
 import { ThemeToggle } from '../components/ui/ThemeToggle'
@@ -14,9 +14,11 @@ const privateNavLinks = [{ to: '/dashboard', label: 'Dashboard' }] as const
 
 function Navigation() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { isAuthenticated, logout } = useAuth()
-  const linkClasses =
-    'text-card-foreground hover:text-accent-foreground px-3 py-2 rounded-md text-sm font-medium'
+  const linkBase =
+    'text-card-foreground hover:text-primary hover:bg-accent/20 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+  const activeLink = 'text-primary font-semibold underline underline-offset-4'
 
   const handleLogout = () => {
     logout()
@@ -29,13 +31,21 @@ function Navigation() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex space-x-8">
             {publicNavLinks.map(({ to, label }) => (
-              <Link key={to} to={to} className={linkClasses}>
+              <Link
+                key={to}
+                to={to}
+                className={location.pathname === to ? `${linkBase} ${activeLink}` : linkBase}
+              >
                 {label}
               </Link>
             ))}
             {isAuthenticated &&
               privateNavLinks.map(({ to, label }) => (
-                <Link key={to} to={to} className={linkClasses}>
+                <Link
+                  key={to}
+                  to={to}
+                  className={location.pathname === to ? `${linkBase} ${activeLink}` : linkBase}
+                >
                   {label}
                 </Link>
               ))}
@@ -46,12 +56,15 @@ function Navigation() {
               <Button
                 variant="ghost"
                 onClick={handleLogout}
-                className="text-card-foreground hover:text-accent-foreground"
+                className="text-card-foreground hover:text-primary hover:bg-accent/20"
               >
                 Logout
               </Button>
             ) : (
-              <Link to="/login" className={linkClasses}>
+              <Link
+                to="/login"
+                className={location.pathname === '/login' ? `${linkBase} ${activeLink}` : linkBase}
+              >
                 Login
               </Link>
             )}
