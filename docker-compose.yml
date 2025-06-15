@@ -60,5 +60,17 @@ services:
         condition: service_healthy
     command: npm run dev
 
+  docs:
+    container_name: starter-docs
+    build:
+      context: ./docs
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./docs:/docs_src
+      - ./docs/mkdocs.yml:/docs_src/mkdocs.yml
+    # The command is already specified in the Dockerfile CMD instruction
+
 volumes:
   postgres_data:

@@ -2,6 +2,8 @@
 
 A modern, full-featured starter template featuring FastAPI backend and React 19 frontend with TypeScript, Tailwind CSS, and shadcn/ui components.
 
+![image](frontend/public/starter.svg)
+
 ## Features
 
 - **Backend (FastAPI)**

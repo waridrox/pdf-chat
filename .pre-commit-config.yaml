@@ -3,10 +3,10 @@ repos:
     rev: v4.5.0
     hooks:
     -   id: trailing-whitespace
-        exclude: ^backend/requirements\.txt$
+        exclude: ^backend/requirements\.txt$|^docs/
         stages: [pre-commit]
     -   id: end-of-file-fixer
-        exclude: ^backend/requirements\.txt$
+        exclude: ^backend/requirements\.txt$|^docs/
         stages: [pre-commit]
     -   id: check-yaml
         stages: [pre-commit]
@@ -23,6 +23,6 @@ repos:
     rev: v3.1.0
     hooks:
     -   id: prettier
-        types_or: [javascript, jsx, ts, tsx, json, css, scss, markdown]
+        types_or: [javascript, jsx, ts, tsx, json, css, scss] # Removed markdown
         stages: [pre-commit]
-        files: ^frontend/src/.*\.(js|jsx|ts|tsx|json|css|scss|md)$
+        files: ^frontend/src/.*\.(js|jsx|ts|tsx|json|css|scss)$ # Removed md
