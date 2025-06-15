@@ -36,9 +36,7 @@ These are the key features and improvements we aim to deliver in the near future
 
 We actively encourage community feedback, contributions, and feature requests to make this starter template even better!
 
-*   **Bug Reports:** If you find a bug, please report it using the [GitHub Issues](https://github.com/your-username/fastapi-react-starter/issues) page (replace with your actual repository URL).
-*   **Feature Requests:** Have an idea for a new feature or an improvement to existing functionality? We'd love to hear it! Please submit feature requests via [GitHub Issues](https://github.com/your-username/fastapi-react-starter/issues), clearly labeling it as a feature request.
+*   **Bug Reports:** If you find a bug, please report it using the [GitHub Issues](https://github.com/raythurman2386/fastapi-react-starter/issues) page (replace with your actual repository URL).
+*   **Feature Requests:** Have an idea for a new feature or an improvement to existing functionality? We'd love to hear it! Please submit feature requests via [GitHub Issues](https://github.com/raythurman2386/fastapi-react-starter/issues), clearly labeling it as a feature request.
 *   **Contributing Code:** If you'd like to contribute directly by fixing bugs or implementing new features, please see our [Development Guide](development.md) for setup instructions and contribution guidelines. Fork the repository, make your changes, and submit a pull request.
-*   **Discussion:** For general questions or discussions, consider using [GitHub Discussions](https://github.com/your-username/fastapi-react-starter/discussions) (if enabled for your repository) or another community channel you set up.
-
-*(Remember to replace `<YOUR_GITHUB_REPO_URL_HERE>` or `https://github.com/your-username/fastapi-react-starter/` with the actual URL of your project repository.)*
+*   **Discussion:** For general questions or discussions, consider using [GitHub Discussions](https://github.com/raythurman2386/fastapi-react-starter/discussions) (if enabled for your repository) or another community channel you set up.
