@@ -48,14 +48,18 @@ For a more detailed visual structure, refer to the `README.md` or the [Project O
 
 ### Running Tests
 
-*(Documentation on the testing framework (e.g., Pytest) and how to run tests should be added here. This might include setup, fixtures, and example commands.)*
-
-Example (if using Pytest):
+This backend is setup with pytest and coverage. To run tests, navigate to the backend directory and run:
 
 ```bash
-# Navigate to backend directory
 cd backend
 pytest
+```
+
+To run tests with coverage, navigate to the backend directory and run:
+
+```bash
+cd backend
+pytest --cov=app
 ```
 
 ### Database Migrations
@@ -143,15 +147,7 @@ logger.error("This is an error message.")
 
 ### Running Tests
 
-*(Documentation on the testing framework (e.g., Vitest, React Testing Library) and how to run tests should be added here. This might include setup, example tests, and commands.)*
-
-Example (if using Vitest with an `npm run test` script):
-
-```bash
-# Navigate to frontend directory
-cd frontend
-npm run test
-```
+*(Documentation on the testing framework (e.g., Vitest, React Testing Library) and how to run tests should be added here. This will be updated as tests for the frontend are added in the future.)*
 
 ### Styling
 
