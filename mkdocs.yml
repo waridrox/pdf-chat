@@ -5,6 +5,12 @@ nav:
   - Home: index.md
   - Initial Setup: initial_setup.md
   - Development: development.md
+  - Frontend Guides:
+    - Tailwind CSS v4: frontend/tailwind-v4.md
+    - Shadcn UI: frontend/shadcn-ui.md
+  - Backend Guides:
+    - FastAPI Overview: backend/fastapi-guide.md
+    - Alembic Migrations: backend/alembic-migrations.md
   - Make it Yours: make_it_yours.md
   - Deployment: deployment.md
   - Roadmap: roadmap.md
