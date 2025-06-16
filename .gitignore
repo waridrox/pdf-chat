@@ -21,7 +21,7 @@ wheels/
 .env
 venv/
 .venv/
-
+site/
 # Node
 node_modules/
 coverage/

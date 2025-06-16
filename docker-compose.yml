@@ -63,14 +63,13 @@ services:
   docs:
     container_name: starter-docs
     build:
-      context: ./docs
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: docs/Dockerfile
     ports:
       - "8001:8001"
     volumes:
-      - ./docs:/docs_src
-      - ./docs/mkdocs.yml:/docs_src/mkdocs.yml
-    # The command is already specified in the Dockerfile CMD instruction
+      - ./docs:/usr/src/app/docs
+      - ./mkdocs.yml:/usr/src/app/mkdocs.yml
 
 volumes:
   postgres_data:

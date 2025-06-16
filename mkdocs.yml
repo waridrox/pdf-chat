@@ -1,5 +1,5 @@
 site_name: FastAPI React Starter Docs
-site_url: http://localhost:8001/ # Will be updated if deployed
+site_url: https://raythurman2386.github.io/fastapi-react-starter/
 
 nav:
   - Home: index.md
@@ -51,7 +51,4 @@ markdown_extensions:
 
 
 # Explicitly point to the current directory for markdown files
-docs_dir: .
-
-# Optional: Specify a directory for static assets if you have any
-# site_dir: site # This is the default build output directory
+docs_dir: docs
