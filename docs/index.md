@@ -23,3 +23,9 @@ To get started, explore the following sections:
 *   **[Project Roadmap](roadmap.md):** An overview of planned features and future development for this starter template.
 
 We aim to keep this documentation up-to-date and helpful. If you find any issues or have suggestions, please feel free to contribute!
+
+<p align="center">
+  <a href="https://github.com/raythurman2386/fastapi-react-starter" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/GitHub-View%20on%20GitHub-blue?logo=github" alt="View on GitHub"/>
+  </a>
+</p>

@@ -4,7 +4,6 @@ from sqlalchemy.pool import AsyncAdaptedQueuePool
 from app.utils.logger import setup_logger
 from app.config import get_settings
 from urllib.parse import quote_plus
-from typing import Optional
 
 settings = get_settings()
 logger = setup_logger(__name__)
@@ -13,15 +12,18 @@ logger = setup_logger(__name__)
 def get_database_url() -> str:
     """
     Constructs the database URL based on configuration.
+    Prioritizes TEST_DATABASE_URL if set in 'testing' environment.
     Returns PostgreSQL URL if credentials are provided, otherwise falls back to SQLite.
     """
+    if settings.ENVIRONMENT == "testing" and settings.TEST_DATABASE_URL:
+        return settings.TEST_DATABASE_URL
+
     if settings.DB_NAME:
         # PostgreSQL connection
         password = quote_plus(settings.DB_PASSWORD) if settings.DB_PASSWORD else ""
         return f"postgresql+asyncpg://{settings.DB_USER}:{password}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
 
-    # SQLite connection (fallback)
-    return "sqlite+aiosqlite:///./app.db"
+    raise ValueError("No database URL found")
 
 
 def create_engine_with_retry(database_url: str):

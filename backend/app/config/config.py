@@ -12,7 +12,9 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     APP_NAME: str = "FastAPI React Starter"
     APP_DESCRIPTION: str = "FastAPI React Starter Template"
-    DATABASE_URL: str = "sqlite+aiosqlite:///./app.db"
+    ENVIRONMENT: str = "development"
+    DATABASE_URL: str = ""
+    TEST_DATABASE_URL: Optional[str] = "sqlite+aiosqlite:///./test_app.db"
     CORS_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:3000"]
     API_PREFIX: str = "/api"
 
@@ -61,5 +63,8 @@ LOGGING_CONFIG = {
     },
 }
 
-ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
+# Ensure environment is one of the defined keys, default to development if not
+if ENVIRONMENT not in LOGGING_CONFIG:
+    ENVIRONMENT = "development"
 CURRENT_LOGGING_CONFIG = LOGGING_CONFIG[ENVIRONMENT]
