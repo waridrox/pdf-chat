@@ -4,29 +4,13 @@ Handles text extraction, chunking, and DB persistence for uploaded PDFs.
 """
 
 import fitz  # PyMuPDF
-import tiktoken
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.rag_models import Document, Chunk
 from app.db.database import AsyncSessionLocal
+from app.services.chunker import split_text_into_chunks
 from app.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
-
-# tiktoken encoder for cl100k_base (GPT-3.5 / GPT-4 / text-embedding-3)
-_encoder = None
-
-
-def _get_encoder():
-    global _encoder
-    if _encoder is None:
-        _encoder = tiktoken.get_encoding("cl100k_base")
-    return _encoder
-
-
-def count_tokens(text: str) -> int:
-    """Count tokens using tiktoken cl100k_base encoding."""
-    return len(_get_encoder().encode(text))
 
 
 def extract_pages(file_path: str) -> list[str]:
@@ -39,52 +23,73 @@ def extract_pages(file_path: str) -> list[str]:
     return pages
 
 
-def chunk_text(
+def chunk_pages(
     page_texts: list[str],
-    max_tokens: int = 800,
+    chunk_size_tokens: int = 800,
     overlap_tokens: int = 100,
 ) -> list[dict]:
-    """Split page texts into chunks of ~max_tokens with overlap.
+    """Chunk page texts and map chunks back to page ranges.
 
     Returns list of dicts with keys:
-      text, token_count, page_start, page_end
+      text, token_count, chunk_index, page_start, page_end
     """
-    chunks = []
-    encoder = _get_encoder()
+    # Build the full text while tracking page boundaries by character offset
+    separator = "\n\n"
+    page_char_ranges: list[tuple[int, int]] = []  # (start, end) per page
+    parts: list[str] = []
+    offset = 0
+    for i, pt in enumerate(page_texts):
+        if i > 0:
+            offset += len(separator)
+        start = offset
+        parts.append(pt)
+        offset += len(pt)
+        page_char_ranges.append((start, offset))
 
-    # Build a flat list of (token, page_number) pairs
-    all_tokens = []
-    for page_idx, page_text in enumerate(page_texts):
-        tokens = encoder.encode(page_text)
-        for tok in tokens:
-            all_tokens.append((tok, page_idx))
+    full_text = separator.join(page_texts)
 
-    if not all_tokens:
-        return chunks
+    raw_chunks = split_text_into_chunks(
+        full_text,
+        chunk_size_tokens=chunk_size_tokens,
+        overlap_tokens=overlap_tokens,
+    )
 
-    start = 0
-    while start < len(all_tokens):
-        end = min(start + max_tokens, len(all_tokens))
-        chunk_pairs = all_tokens[start:end]
+    # Map each chunk back to page ranges via character search
+    results: list[dict] = []
+    search_start = 0
+    for rc in raw_chunks:
+        chunk_text = rc["chunk_text"]
+        # Find where this chunk text appears in full_text
+        pos = full_text.find(chunk_text, search_start)
+        if pos == -1:
+            pos = full_text.find(chunk_text)
+        if pos == -1:
+            # Fallback: can't map, use all pages
+            page_start = 0
+            page_end = len(page_texts) - 1
+        else:
+            chunk_end = pos + len(chunk_text)
+            page_start = 0
+            page_end = len(page_texts) - 1
+            for pi, (ps, pe) in enumerate(page_char_ranges):
+                if ps <= pos < pe:
+                    page_start = pi
+                    break
+            for pi, (ps, pe) in enumerate(page_char_ranges):
+                if ps < chunk_end <= pe:
+                    page_end = pi
+                    break
+            search_start = pos + 1
 
-        token_ids = [p[0] for p in chunk_pairs]
-        page_indices = [p[1] for p in chunk_pairs]
-
-        chunk_text_str = encoder.decode(token_ids)
-        chunks.append({
-            "text": chunk_text_str,
-            "token_count": len(token_ids),
-            "page_start": min(page_indices),
-            "page_end": max(page_indices),
+        results.append({
+            "text": chunk_text,
+            "token_count": rc["token_count"],
+            "chunk_index": rc["chunk_index"],
+            "page_start": page_start,
+            "page_end": page_end,
         })
 
-        # Advance by (max_tokens - overlap)
-        step = max_tokens - overlap_tokens
-        if step <= 0:
-            step = max_tokens
-        start += step
-
-    return chunks
+    return results
 
 
 async def process_document(document_id: int, file_path: str) -> None:
@@ -98,7 +103,7 @@ async def process_document(document_id: int, file_path: str) -> None:
         logger.info(f"Document {document_id}: extracted {page_count} pages")
 
         # 2. Chunk the text
-        chunks_data = chunk_text(page_texts)
+        chunks_data = chunk_pages(page_texts)
         logger.info(f"Document {document_id}: produced {len(chunks_data)} chunks")
 
         # 3. Persist to DB
@@ -114,10 +119,10 @@ async def process_document(document_id: int, file_path: str) -> None:
                 doc.metadata_ = {"status": "ready"}
 
                 # Insert chunks
-                for idx, chunk_data in enumerate(chunks_data):
+                for chunk_data in chunks_data:
                     chunk = Chunk(
                         document_id=document_id,
-                        chunk_index=idx,
+                        chunk_index=chunk_data["chunk_index"],
                         text=chunk_data["text"],
                         token_count=chunk_data["token_count"],
                         page_start=chunk_data["page_start"],
