@@ -82,3 +82,23 @@ async def upload_document(
     background_tasks.add_task(process_document, doc.id, file_path)
 
     return {"document_id": doc.id, "status": "processing"}
+
+
+@router.get("/{document_id}/status")
+async def get_document_status(
+    document_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Get the processing status of a document."""
+    doc = await db.get(Document, document_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    metadata = doc.metadata_ or {}
+    return {
+        "document_id": doc.id,
+        "filename": doc.filename,
+        "status": metadata.get("status", "unknown"),
+        "page_count": doc.page_count,
+        "file_size_bytes": doc.file_size_bytes,
+    }
