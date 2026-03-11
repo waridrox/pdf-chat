@@ -36,6 +36,7 @@ services:
       - DB_PORT=5432
       - CORS_ORIGINS=["http://localhost:5173"]
       - ENVIRONMENT=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
     depends_on:
       postgres:
         condition: service_healthy
