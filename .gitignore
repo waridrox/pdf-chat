@@ -57,6 +57,9 @@ __pycache__/
 logs/
 *.log
 
+# Uploads
+backend/storage/uploads/
+
 # Testing
 .coverage
 htmlcov/
