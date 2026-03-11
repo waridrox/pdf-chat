@@ -75,7 +75,7 @@ def upgrade() -> None:
     op.execute("ALTER TABLE embeddings ALTER COLUMN created_at SET DEFAULT now();")
     # Add vector column via raw SQL (Alembic has no built-in vector type)
     op.execute(
-        "ALTER TABLE embeddings ADD COLUMN embedding vector(1536) NOT NULL;"
+        "ALTER TABLE embeddings ADD COLUMN embedding vector(3072) NOT NULL;"
     )
     op.create_index(
         "ix_embeddings_chunk_id", "embeddings", ["chunk_id"]

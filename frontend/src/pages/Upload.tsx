@@ -11,7 +11,7 @@ interface DocInfo {
     page_count: number | null
 }
 
-const API_BASE = '/api'
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`
 
 export default function UploadPage() {
     const [state, setState] = useState<UploadState>('idle')

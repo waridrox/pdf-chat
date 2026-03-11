@@ -1,14 +1,10 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import RootLayout from '../layouts/RootLayout'
-import { ProtectedRoute } from '../components/ProtectedRoute'
 
 // Lazy load components
 const Home = lazy(() => import('../pages/Home'))
 const About = lazy(() => import('../pages/About'))
-const Dashboard = lazy(() => import('../pages/Dashboard'))
-const Login = lazy(() => import('../pages/Login'))
-const Register = lazy(() => import('../pages/Register'))
 const Upload = lazy(() => import('../pages/Upload'))
 const Chat = lazy(() => import('../pages/Chat'))
 
@@ -31,47 +27,8 @@ function PageLoader() {
   )
 }
 
-const routes = {
-  public: [
-    {
-      index: true,
-      element: <Home />,
-    },
-    {
-      path: 'about',
-      element: <About />,
-    },
-    {
-      path: 'login',
-      element: <Login />,
-    },
-    {
-      path: 'register',
-      element: <Register />,
-    },
-    {
-      path: 'upload',
-      element: <Upload />,
-    },
-    {
-      path: 'chat',
-      element: <Chat />,
-    },
-  ],
-  protected: [
-    {
-      path: 'dashboard',
-      element: <Dashboard />,
-    },
-  ],
-}
-
 const withSuspense = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
-)
-
-const withProtection = (element: React.ReactNode) => (
-  <ProtectedRoute>{withSuspense(element)}</ProtectedRoute>
 )
 
 export const router = createBrowserRouter([
@@ -80,18 +37,22 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorBoundary />,
     children: [
-      // Public routes
-      ...routes.public.map((route) => ({
-        ...route,
-        element: withSuspense(route.element),
-      })),
-
-      // Protected routes
-      ...routes.protected.map((route) => ({
-        ...route,
-        element: withProtection(route.element),
-      })),
-
+      {
+        index: true,
+        element: withSuspense(<Home />),
+      },
+      {
+        path: 'about',
+        element: withSuspense(<About />),
+      },
+      {
+        path: 'upload',
+        element: withSuspense(<Upload />),
+      },
+      {
+        path: 'chat',
+        element: withSuspense(<Chat />),
+      },
       // Catch-all route
       {
         path: '*',

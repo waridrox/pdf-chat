@@ -20,7 +20,7 @@ class DummyItem:
 
 class DummyResponse:
     def __init__(self, count=10):
-        self.data = [DummyItem([0.1] * 1536) for _ in range(count)]
+        self.data = [DummyItem([0.1] * 3072) for _ in range(count)]
 
 
 def _make_mock_session():

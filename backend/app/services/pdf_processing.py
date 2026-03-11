@@ -106,17 +106,19 @@ async def process_document(document_id: int, file_path: str) -> None:
         chunks_data = chunk_pages(page_texts)
         logger.info(f"Document {document_id}: produced {len(chunks_data)} chunks")
 
-        # 3. Persist to DB
+        # 3. Persist chunks to DB and retrieve their IDs
+        chunks_inserted = []
         async with AsyncSessionLocal() as session:
             async with session.begin():
-                # Update document with page_count and status
+                # Update document with page_count
                 doc = await session.get(Document, document_id)
                 if doc is None:
                     logger.error(f"Document {document_id} not found in DB")
                     return
 
                 doc.page_count = page_count
-                doc.metadata_ = {"status": "ready"}
+                # Keep status as processing for now
+                doc.metadata_ = {"status": "processing"}
 
                 # Insert chunks
                 for chunk_data in chunks_data:
@@ -129,8 +131,27 @@ async def process_document(document_id: int, file_path: str) -> None:
                         page_end=chunk_data["page_end"],
                     )
                     session.add(chunk)
+                    chunks_inserted.append(chunk)
+                
+                await session.flush()
+                chunks_for_embedding = [{"chunk_id": c.id, "chunk_text": c.text} for c in chunks_inserted]
 
         logger.info(f"Document {document_id}: processing complete, {len(chunks_data)} chunks saved")
+
+        # 4. Generate embeddings
+        logger.info(f"Document {document_id}: generating embeddings...")
+        from app.services.embedding_service import EmbeddingsService
+        embed_svc = EmbeddingsService()
+        await embed_svc.embed_and_store_chunks(document_id, chunks_for_embedding)
+
+        # 5. Mark as ready
+        async with AsyncSessionLocal() as session:
+            async with session.begin():
+                doc = await session.get(Document, document_id)
+                if doc:
+                    doc.metadata_ = {"status": "ready"}
+        
+        logger.info(f"Document {document_id}: embeddings generated and document is ready")
 
     except Exception as e:
         logger.error(f"Error processing document {document_id}: {e}")

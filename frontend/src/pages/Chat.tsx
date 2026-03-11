@@ -50,8 +50,9 @@ export default function ChatPage() {
 
         closeWs()
 
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-        const ws = new WebSocket(`${protocol}//${window.location.hostname}:8000/ws/chat`)
+        const apiUrl = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:8000`
+        const wsUrl = apiUrl.replace(/^http/, 'ws') + '/ws/chat'
+        const ws = new WebSocket(wsUrl)
         wsRef.current = ws
 
         let fullAnswer = ''
@@ -153,8 +154,8 @@ export default function ChatPage() {
                         )}
                         <div
                             className={`max-w-[80%] rounded-xl px-4 py-3 ${msg.role === 'user'
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'bg-muted text-foreground'
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-muted text-foreground'
                                 }`}
                         >
                             <p className="whitespace-pre-wrap text-sm leading-relaxed">

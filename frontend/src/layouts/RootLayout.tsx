@@ -1,38 +1,27 @@
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { AppProvider } from '../context/AppContext'
 import { Notification } from '../components/ui/Notification'
 import { ThemeToggle } from '../components/ui/ThemeToggle'
-import { useAuth } from '../context/AuthContext'
-import { Button } from '../components/ui/Button'
 
-const publicNavLinks = [
+const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/upload', label: 'Upload' },
   { to: '/chat', label: 'Chat' },
 ] as const
 
-const privateNavLinks = [{ to: '/dashboard', label: 'Dashboard' }] as const
-
 function Navigation() {
-  const navigate = useNavigate()
   const location = useLocation()
-  const { isAuthenticated, logout } = useAuth()
   const linkBase =
     'text-card-foreground hover:text-primary hover:bg-accent/20 px-3 py-2 rounded-md text-sm font-medium transition-colors'
   const activeLink = 'text-primary font-semibold underline underline-offset-4'
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
 
   return (
     <nav className="bg-card text-card-foreground shadow-sm transition-colors">
       <div className="container mx-auto px-6">
         <div className="flex justify-between h-16 items-center">
           <div className="flex space-x-8">
-            {publicNavLinks.map(({ to, label }) => (
+            {navLinks.map(({ to, label }) => (
               <Link
                 key={to}
                 to={to}
@@ -41,35 +30,9 @@ function Navigation() {
                 {label}
               </Link>
             ))}
-            {isAuthenticated &&
-              privateNavLinks.map(({ to, label }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  className={location.pathname === to ? `${linkBase} ${activeLink}` : linkBase}
-                >
-                  {label}
-                </Link>
-              ))}
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            {isAuthenticated ? (
-              <Button
-                variant="ghost"
-                onClick={handleLogout}
-                className="text-card-foreground hover:text-primary hover:bg-accent/20"
-              >
-                Logout
-              </Button>
-            ) : (
-              <Link
-                to="/login"
-                className={location.pathname === '/login' ? `${linkBase} ${activeLink}` : linkBase}
-              >
-                Login
-              </Link>
-            )}
           </div>
         </div>
       </div>

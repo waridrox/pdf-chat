@@ -24,6 +24,8 @@ services:
   backend:
     container_name: starter-backend
     build: ./backend
+    env_file:
+      - .env.docker
     ports:
       - "8000:8000"
     volumes:
@@ -36,7 +38,6 @@ services:
       - DB_PORT=5432
       - CORS_ORIGINS=["http://localhost:5173"]
       - ENVIRONMENT=development
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
     depends_on:
       postgres:
         condition: service_healthy
